@@ -86,9 +86,9 @@ func TransformScale(v *Vec3) Mat4 {
 // Projection Transformations
 func TransformOrtho(left float32, right float32, bottom float32, top float32, zmin float32, zmax float32) Mat4 {
 	var temp Mat4 = Mat4Identity()
-	var tx float32 = (right + left) / (right - left)
-	var ty float32 = (top + bottom) / (top - bottom)
-	var tz float32 = (zmax + zmin) / (zmax - zmin)
+	var tx float32 = -((right + left) / (right - left))
+	var ty float32 = -((top + bottom) / (top - bottom))
+	var tz float32 = -((zmax + zmin) / (zmax - zmin))
 
 	temp.M00 = 2.0 / (right - left)
 	temp.M11 = 2.0 / (top - bottom)

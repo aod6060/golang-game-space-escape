@@ -33,6 +33,27 @@ func Render() {
 
 	render.Bind()
 
+	var proj, view, model vmath.Mat4
+
+	proj = vmath.TransformOrtho2D(0.0, float32(app.GetWidth()), float32(app.GetHeight()), 0.0)
+	render.SetProjection(&proj)
+
+	view = vmath.Mat4Identity()
+	render.SetView(&view)
+
+	var t, s vmath.Mat4
+	var v vmath.Vec3
+
+	v = vmath.Vec3Create(32.0, 32.0, 0.0)
+	t = vmath.TransformTranslate(&v)
+	s = vmath.TransformScale(&v)
+
+	model = vmath.Mat4MulMatrix(&s, &t)
+
+	render.SetModel(&model)
+
+	render.Draw()
+
 	render.Unbind()
 
 }
