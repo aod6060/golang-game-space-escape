@@ -6,6 +6,7 @@ import sdl "github.com/veandco/go-sdl2/sdl"
 import "github.com/go-gl/gl/v4.1-compatibility/gl"
 
 import "github.com/aod6060/golang-game-space-escape/engine/input"
+import "github.com/aod6060/golang-game-space-escape/engine/render"
 
 type Config struct {
 	Caption string
@@ -59,6 +60,7 @@ func Init(_conf *Config) {
 	gl.Init()
 
 	input.Init()
+	render.Init()
 
 	conf.InitCB()
 }
@@ -94,6 +96,8 @@ func Update() {
 
 func Release() {
 	conf.ReleaseCB()
+
+	render.Release()
 	input.Release()
 	
 	sdl.GLDeleteContext(context)

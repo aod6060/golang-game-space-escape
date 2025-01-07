@@ -1,11 +1,14 @@
 package game
 
 
-import "fmt"
+//import "fmt"
 import sdl "github.com/veandco/go-sdl2/sdl"
-import "github.com/go-gl/gl/v4.1-compatibility/gl"
+//import "github.com/go-gl/gl/v4.1-compatibility/gl"
+import "github.com/aod6060/golang-game-space-escape/engine/vmath"
 import "github.com/aod6060/golang-game-space-escape/engine/app"
-import "github.com/aod6060/golang-game-space-escape/engine/input"
+import "github.com/aod6060/golang-game-space-escape/engine/render"
+
+//import "github.com/aod6060/golang-game-space-escape/engine/input"
 
 
 var count int32 = 0
@@ -21,9 +24,16 @@ func Update(delta float32) {
 }
 
 func Render() {
+	/*
 	gl.ClearColor(1.0, 0.0, 0.0, 1.0)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
+	*/
 
+	render.Clear(vmath.Vec4Create(1.0, 0.0, 0.0, 1.0))
+
+	render.Bind()
+
+	render.Unbind()
 
 }
 
