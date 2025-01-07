@@ -30,6 +30,7 @@ type vertexBuffer struct {
 
 var vertices vertexBuffer
 
+var vertCent vertexBuffer
 
 // Uniforms
 func Init() {
@@ -95,9 +96,22 @@ func Init() {
 	vbUpdate(&vertices)
 
 	fmt.Println("Size: ", len(vertices.list))
+
+	vbInit(&vertCent)
+
+	vbAdd3f(&vertCent, -0.5, -0.5, 0.0)
+	vbAdd3f(&vertCent, 0.5, -0.5, 0.0)
+	vbAdd3f(&vertCent, -0.5, 0.5, 0.0)
+
+	vbAdd3f(&vertCent, -0.5, 0.5, 0.0)
+	vbAdd3f(&vertCent, 0.5, -0.5, 0.0)
+	vbAdd3f(&vertCent, 0.5, 0.5, 0.0)
+
+	vbUpdate(&vertCent)
 }
 
 func Release() {
+	vbRelease(&vertCent)
 	vbRelease(&vertices)
 
 	gl.DeleteVertexArrays(1, &mainVertexArray)
@@ -140,6 +154,18 @@ func Draw() {
 	vbBind(&vertices)
 	gl.VertexAttribPointer(A_VERTICES, 3, gl.FLOAT, false, 0, nil)
 	vbUnbind(&vertices)
+
+	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(vertices.list) / 3))
+
+	gl.BindVertexArray(0)
+}
+
+func DrawCenter() {
+	gl.BindVertexArray(mainVertexArray)
+
+	vbBind(&vertCent)
+	gl.VertexAttribPointer(A_VERTICES, 3, gl.FLOAT, false, 0, nil)
+	vbUnbind(&vertCent)
 
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(vertices.list) / 3))
 

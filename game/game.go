@@ -39,11 +39,6 @@ func Update(delta float32) {
 }
 
 func Render() {
-	/*
-	gl.ClearColor(1.0, 0.0, 0.0, 1.0)
-	gl.Clear(gl.COLOR_BUFFER_BIT)
-	*/
-
 	render.Clear(vmath.Vec4Create(1.0, 0.0, 0.0, 1.0))
 
 	render.Bind()
@@ -67,7 +62,7 @@ func Render() {
 
 	render.SetModel(&model)
 
-	render.Draw()
+	render.DrawCenter()
 
 	render.Unbind()
 
