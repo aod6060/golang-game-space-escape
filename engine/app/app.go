@@ -5,6 +5,8 @@ package app
 import sdl "github.com/veandco/go-sdl2/sdl"
 import "github.com/go-gl/gl/v4.1-compatibility/gl"
 
+import "github.com/aod6060/golang-game-space-escape/engine/input"
+
 type Config struct {
 	Caption string
 	Width int32
@@ -56,6 +58,8 @@ func Init(_conf *Config) {
 
 	gl.Init()
 
+	input.Init()
+
 	conf.InitCB()
 }
 
@@ -74,11 +78,15 @@ func Update() {
 			if event.GetType() == sdl.QUIT {
 				Exit()
 			}
+
+			input.HandleEvent(event)
 			conf.HandleEventCB(event)
 		}
 
 		conf.UpdateCB(delta)
 		conf.RenderCB()
+
+		input.Update()
 
 		window.GLSwap()
 	}
@@ -86,7 +94,8 @@ func Update() {
 
 func Release() {
 	conf.ReleaseCB()
-
+	input.Release()
+	
 	sdl.GLDeleteContext(context)
 	window.Destroy()
 	sdl.Quit()
