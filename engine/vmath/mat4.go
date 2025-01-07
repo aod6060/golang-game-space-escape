@@ -386,6 +386,31 @@ func Mat4MulVec4(m *Mat4, v *Vec4) Vec4 {
 	temp.Y = m.M10 * v.X + m.M11 * v.Y + m.M12 * v.Z + m.M13 * v.W
 	temp.Z = m.M20 * v.X + m.M21 * v.Y + m.M22 * v.Z + m.M23 * v.W
 	temp.W = m.M30 * v.X + m.M31 * v.Y + m.M32 * v.Z + m.M33 * v.W
-	
+
+	return temp
+}
+
+func Mat4ToArray(m *Mat4) []float32 {
+	var temp []float32
+	temp = append(temp, m.M00)
+	temp = append(temp, m.M01)
+	temp = append(temp, m.M02)
+	temp = append(temp, m.M03)
+
+	temp = append(temp, m.M10)
+	temp = append(temp, m.M11)
+	temp = append(temp, m.M12)
+	temp = append(temp, m.M13)
+
+	temp = append(temp, m.M20)
+	temp = append(temp, m.M21)
+	temp = append(temp, m.M22)
+	temp = append(temp, m.M23)
+
+	temp = append(temp, m.M30)
+	temp = append(temp, m.M31)
+	temp = append(temp, m.M32)
+	temp = append(temp, m.M33)
+
 	return temp
 }

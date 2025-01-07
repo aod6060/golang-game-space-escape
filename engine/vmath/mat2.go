@@ -103,3 +103,12 @@ func Mat2MulVec2(a *Mat2, b *Vec2) Vec2 {
 
 	return temp
 }
+
+func Mat2ToArray(a *Mat2) []float32 {
+	var temp []float32
+	temp = append(temp, a.M00)
+	temp = append(temp, a.M01)
+	temp = append(temp, a.M10)
+	temp = append(temp, a.M11)
+	return temp
+}

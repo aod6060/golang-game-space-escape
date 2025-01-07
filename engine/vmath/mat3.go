@@ -230,6 +230,22 @@ func Mat3MulVec3(m *Mat3, v *Vec3) Vec3 {
 	temp.X = m.M00 * v.X + m.M01 * v.Y + m.M02 * v.Z
 	temp.Y = m.M10 * v.X + m.M11 * v.Y + m.M12 * v.Z
 	temp.Z = m.M20 * v.X + m.M21 * v.Y + m.M22 * v.Z
-	
+
+	return temp
+}
+
+func Mat3ToArray(m *Mat3) []float32 {
+	var temp []float32
+	temp = append(temp, m.M00)
+	temp = append(temp, m.M01)
+	temp = append(temp, m.M02)
+
+	temp = append(temp, m.M10)
+	temp = append(temp, m.M11)
+	temp = append(temp, m.M12)
+
+	temp = append(temp, m.M20)
+	temp = append(temp, m.M21)
+	temp = append(temp, m.M22)
 	return temp
 }
