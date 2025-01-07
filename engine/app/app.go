@@ -61,12 +61,32 @@ func Init(_conf *Config) {
 
 func Update() {
 	var event sdl.Event
-	var pre_time uint32 = sdl.GetTicks()
-	var curr_time uint32
+	var preTime uint32 = sdl.GetTicks()
+	var currTime uint32
 	var delta float32
+
+	for isRunning {
+		currTime = sdl.GetTicks()
+		delta = (float32(currTime) - float32(preTime)) / 1000.0
+		preTime = currTime
+
+		for event = sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+			if event.GetType() == sdl.QUIT {
+				Exit()
+			}
+			conf.HandleEventCB(event)
+		}
+
+		conf.UpdateCB(delta)
+		conf.RenderCB()
+
+		window.GLSwap()
+	}
 }
 
 func Release() {
+	conf.ReleaseCB()
+
 	sdl.GLDeleteContext(context)
 	window.Destroy()
 	sdl.Quit()
@@ -77,11 +97,11 @@ func GetWidth() int32 {
 }
 
 func GetHeight() int32 {
-	return config.Height
+	return conf.Height
 }
 
 func GetAspect() float32 {
-	return float32(GetWidth()) / float32(GetHeight)
+	return float32(GetWidth()) / float32(GetHeight())
 }
 
 func Exit() {
