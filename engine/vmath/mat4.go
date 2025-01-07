@@ -378,3 +378,14 @@ func Mat4Inverse(mat *Mat4) Mat4 {
 
 	return Mat4DivScalar(&temp2, det)
 }
+
+func Mat4MulVec4(m *Mat4, v *Vec4) Vec4 {
+	var temp Vec4
+
+	temp.X = m.M00 * v.X + m.M01 * v.Y + m.M02 * v.Z + m.M03 * v.W
+	temp.Y = m.M10 * v.X + m.M11 * v.Y + m.M12 * v.Z + m.M13 * v.W
+	temp.Z = m.M20 * v.X + m.M21 * v.Y + m.M22 * v.Z + m.M23 * v.W
+	temp.W = m.M30 * v.X + m.M31 * v.Y + m.M32 * v.Z + m.M33 * v.W
+	
+	return temp
+}

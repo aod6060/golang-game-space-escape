@@ -94,3 +94,12 @@ func Mat2Inverse(a *Mat2) Mat2 {
 
 	return Mat2DivScalar(&temp, Mat2Det(&temp))
 }
+
+func Mat2MulVec2(a *Mat2, b *Vec2) Vec2 {
+	var temp Vec2
+
+	temp.X = a.M00 * b.X + a.M01 * b.Y
+	temp.Y = a.M10 * b.X + a.M11 * b.Y
+
+	return temp
+}

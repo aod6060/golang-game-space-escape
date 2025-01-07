@@ -72,6 +72,12 @@ func main() {
 	var test7_inv = vmath.Mat2Inverse(&test7)
 	fmt.Println("Mul Test: ", vmath.Mat2MulMatrix(&test7, &test7_inv)) // this should be identity or just abount
 
+	var v1 vmath.Vec2 = vmath.Vec2Create(1.0, 1.0)
+
+	var total_v2 vmath.Vec2 = vmath.Mat2MulVec2(&test7, &v1)
+
+	fmt.Println("Vec2: ", total_v2)
+
 	// Mat3
 	var test9 vmath.Mat3 = vmath.Mat3Create(
 		1.0, 2.0, 4.0, 
@@ -99,6 +105,9 @@ func main() {
 	var test9_inv = vmath.Mat3Inverse(&test9)
 	fmt.Println("Mul Test: ", vmath.Mat3MulMatrix(&test9, &test9_inv)) // this should be identity or just abount
 
+	var v2 vmath.Vec3 = vmath.Vec3Create(1.0, 1.0, 1.0)
+	fmt.Println("Vec3", vmath.Mat3MulVec3(&test9, &v2))
+
 	// Mat4
 	var test11 vmath.Mat4 = vmath.Mat4Create(
 		3.0, 2.0, 8.0, 7.0,
@@ -125,4 +134,9 @@ func main() {
 	fmt.Println("Inverse", vmath.Mat4Inverse(&test11))
 	var test11_inv vmath.Mat4 = vmath.Mat4Inverse(&test11)
 	fmt.Println("Mul Test", vmath.Mat4MulMatrix(&test11, &test11_inv))
+
+	var v3 vmath.Vec4 = vmath.Vec4Create(1.0, 1.0, 1.0, 1.0)
+	fmt.Println("Vec4", vmath.Mat4MulVec4(&test11, &v3))
 }
+
+
