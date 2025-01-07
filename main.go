@@ -100,4 +100,29 @@ func main() {
 	fmt.Println("Mul Test: ", vmath.Mat3MulMatrix(&test9, &test9_inv)) // this should be identity or just abount
 
 	// Mat4
+	var test11 vmath.Mat4 = vmath.Mat4Create(
+		3.0, 2.0, 8.0, 7.0,
+		8.0, 5.0, 4.0, 5.0,
+		2.0, 1.0, 5.0, 2.0,
+		7.0, 9.0, 2.0, 3.0)
+	fmt.Println("Mat4: ", test11)
+
+	var test12 vmath.Mat4 = vmath.Mat4Create(
+		1.0, 2.0, 4.0, 3.0, 
+		1.0, 5.0, 8.0, 9.0, 
+		2.0, 3.0, 4.0, 5.0,
+		7.0, 8.0, 5.0, 2.0)
+	fmt.Println("Mat4: ", test12)
+	fmt.Println("Identity", vmath.Mat4Identity())
+	fmt.Println("Addision", vmath.Mat4Add(&test11, &test12))
+	fmt.Println("Subtraction", vmath.Mat4Sub(&test11, &test12))
+	fmt.Println("Multiply Scalar", vmath.Mat4MulScalar(&test11, 2.0))
+	fmt.Println("Divide Scalar", vmath.Mat4DivScalar(&test11, 2.0))
+	fmt.Println("Multiply Matrix", vmath.Mat4MulMatrix(&test11, &test12))
+	fmt.Println("Transpose", vmath.Mat4Transpose(&test11))
+	fmt.Println("Trace", vmath.Mat4Trace(&test11))
+	fmt.Println("Det", vmath.Mat4Det(&test11))
+	fmt.Println("Inverse", vmath.Mat4Inverse(&test11))
+	var test11_inv vmath.Mat4 = vmath.Mat4Inverse(&test11)
+	fmt.Println("Mul Test", vmath.Mat4MulMatrix(&test11, &test11_inv))
 }
