@@ -16,12 +16,17 @@ var count int32 = 0
 
 
 var pos vmath.Vec3
+var size vmath.Vec3
+
 var speed float32 = 128.0
 
 func Init() {
 	pos = vmath.Vec3Create(32.0, 32.0, 0.0)
+	size = vmath.Vec3Create(32.0, 32.0, 0.0)
 
 	render.TextureCreateFromFile("player", "data/textures/player.png")
+	render.FontCreateFont("font", "data/font/font.ttf", 32)
+
 }
 
 func HandleEvent(e sdl.Event) {
@@ -39,12 +44,44 @@ func Update(delta float32) {
 	pos = vmath.Vec3Add(&pos, &vel)
 }
 
+
+
+func DrawEntity(pos vmath.Vec3, size vmath.Vec3) {
+	var t, s, model vmath.Mat4
+
+	t = vmath.TransformTranslate(&pos)
+	s = vmath.TransformScale(&size)
+
+	model = vmath.Mat4MulMatrix(&s, &t)
+
+	render.SetModel(&model)
+
+	render.DrawCenter()
+}
+
+func DrawText(text string, pos vmath.Vec3) {
+	var t, s, model vmath.Mat4
+
+	t = vmath.TransformTranslate(&pos)
+
+	var w, h int = render.FontGetSize("font", text)
+
+	var size vmath.Vec3 = vmath.Vec3Create(float32(w), float32(h), 0.0)
+
+	s = vmath.TransformScale(&size)
+
+	model = vmath.Mat4MulMatrix(&s, &t)
+
+	render.SetModel(&model)
+	render.FontDraw("font", text)
+}
+
 func Render() {
 	render.Clear(vmath.Vec4Create(1.0, 0.0, 0.0, 1.0))
 
 	render.Bind()
 
-	var proj, view, model vmath.Mat4
+	var proj, view vmath.Mat4
 
 	proj = vmath.TransformOrtho2D(0.0, float32(app.GetWidth()), float32(app.GetHeight()), 0.0)
 	render.SetProjection(&proj)
@@ -52,6 +89,7 @@ func Render() {
 	view = vmath.Mat4Identity()
 	render.SetView(&view)
 
+	/*
 	var t, s vmath.Mat4
 	var v vmath.Vec3
 
@@ -60,15 +98,18 @@ func Render() {
 	s = vmath.TransformScale(&v)
 
 	model = vmath.Mat4MulMatrix(&s, &t)
+	*/
 
 	render.EnableBlend()
 
-	render.SetModel(&model)
+	//render.SetModel(&model)
 
 	render.TextureBind("player", gl.TEXTURE0)
-	render.DrawCenter()
+	DrawEntity(pos, size)
 	render.TextureUnbind("player", gl.TEXTURE0)
 
+	DrawText("Hello, World", vmath.Vec3Create(0.0, 0.0, 0.0))
+	
 	render.DisableBlend()
 	render.Unbind()
 

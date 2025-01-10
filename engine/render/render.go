@@ -79,7 +79,7 @@ func Init() {
 	uModel = gl.GetUniformLocation(mainProgram, toGLString("model"))
 	uTex0 = gl.GetUniformLocation(mainProgram, toGLString("tex0"))
 	gl.Uniform1i(uTex0, 0)
-	
+
 	fmt.Println(uProj, uView, uModel)
 
 	// Attributes
@@ -130,10 +130,11 @@ func Init() {
 	vbUpdate(&texCoords)
 
 	TextureInit()
+	FontInit()
 }
 
 func Release() {
-
+	FontRelease()
 	TextureRelease()
 
 	vbRelease(&texCoords)
