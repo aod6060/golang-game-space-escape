@@ -3,7 +3,7 @@ package game
 
 //import "fmt"
 import sdl "github.com/veandco/go-sdl2/sdl"
-//import "github.com/go-gl/gl/v4.1-compatibility/gl"
+import "github.com/go-gl/gl/v4.1-compatibility/gl"
 import "github.com/aod6060/golang-game-space-escape/engine/vmath"
 import "github.com/aod6060/golang-game-space-escape/engine/app"
 import "github.com/aod6060/golang-game-space-escape/engine/input"
@@ -21,6 +21,7 @@ var speed float32 = 128.0
 func Init() {
 	pos = vmath.Vec3Create(32.0, 32.0, 0.0)
 
+	render.TextureCreateFromFile("player", "data/textures/player.png")
 }
 
 func HandleEvent(e sdl.Event) {
@@ -60,10 +61,15 @@ func Render() {
 
 	model = vmath.Mat4MulMatrix(&s, &t)
 
+	render.EnableBlend()
+
 	render.SetModel(&model)
 
+	render.TextureBind("player", gl.TEXTURE0)
 	render.DrawCenter()
+	render.TextureUnbind("player", gl.TEXTURE0)
 
+	render.DisableBlend()
 	render.Unbind()
 
 }

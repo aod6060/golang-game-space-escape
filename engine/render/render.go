@@ -19,9 +19,11 @@ var mainVertexArray uint32 = 0
 var uProj int32 = 0
 var uView int32 = 0
 var uModel int32 = 0
+var uTex0 int32 = 0
 
 // Attributes
 const A_VERTICES uint32 = 0
+const A_TEXCOORDS uint32 = 1
 
 type vertexBuffer struct {
 	list []float32
@@ -31,6 +33,9 @@ type vertexBuffer struct {
 var vertices vertexBuffer
 
 var vertCent vertexBuffer
+
+var texCoords vertexBuffer
+
 
 // Uniforms
 func Init() {
@@ -72,12 +77,15 @@ func Init() {
 	uProj = gl.GetUniformLocation(mainProgram, toGLString("proj"))
 	uView = gl.GetUniformLocation(mainProgram, toGLString("view"))
 	uModel = gl.GetUniformLocation(mainProgram, toGLString("model"))
-
+	uTex0 = gl.GetUniformLocation(mainProgram, toGLString("tex0"))
+	gl.Uniform1i(uTex0, 0)
+	
 	fmt.Println(uProj, uView, uModel)
 
 	// Attributes
 	gl.BindVertexArray(mainVertexArray)
 	gl.EnableVertexAttribArray(A_VERTICES)
+	gl.EnableVertexAttribArray(A_TEXCOORDS)
 	gl.BindVertexArray(0)
 
 	Unbind()
@@ -108,9 +116,27 @@ func Init() {
 	vbAdd3f(&vertCent, 0.5, 0.5, 0.0)
 
 	vbUpdate(&vertCent)
+
+	vbInit(&texCoords)
+
+	vbAdd2f(&texCoords, 0.0, 0.0)
+	vbAdd2f(&texCoords, 1.0, 0.0)
+	vbAdd2f(&texCoords, 0.0, 1.0)
+
+	vbAdd2f(&texCoords, 0.0, 1.0)
+	vbAdd2f(&texCoords, 1.0, 0.0)
+	vbAdd2f(&texCoords, 1.0, 1.0)
+
+	vbUpdate(&texCoords)
+
+	TextureInit()
 }
 
 func Release() {
+
+	TextureRelease()
+
+	vbRelease(&texCoords)
 	vbRelease(&vertCent)
 	vbRelease(&vertices)
 
@@ -155,6 +181,10 @@ func Draw() {
 	gl.VertexAttribPointer(A_VERTICES, 3, gl.FLOAT, false, 0, nil)
 	vbUnbind(&vertices)
 
+	vbBind(&texCoords)
+	gl.VertexAttribPointer(A_TEXCOORDS, 2, gl.FLOAT, false, 0, nil)
+	vbBind(&texCoords)
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(vertices.list) / 3))
 
 	gl.BindVertexArray(0)
@@ -167,9 +197,23 @@ func DrawCenter() {
 	gl.VertexAttribPointer(A_VERTICES, 3, gl.FLOAT, false, 0, nil)
 	vbUnbind(&vertCent)
 
+	vbBind(&texCoords)
+	gl.VertexAttribPointer(A_TEXCOORDS, 2, gl.FLOAT, false, 0, nil)
+	vbBind(&texCoords)
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(vertices.list) / 3))
 
 	gl.BindVertexArray(0)
+}
+
+func EnableBlend() {
+	gl.Enable(gl.BLEND)
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+
+}
+
+func DisableBlend() {
+	gl.Disable(gl.BLEND)
 }
 
 // VertexBuffer
