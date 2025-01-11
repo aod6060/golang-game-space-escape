@@ -7,6 +7,7 @@ import "github.com/go-gl/gl/v4.1-compatibility/gl"
 
 import "github.com/aod6060/golang-game-space-escape/engine/input"
 import "github.com/aod6060/golang-game-space-escape/engine/render"
+import "github.com/aod6060/golang-game-space-escape/engine/vmath"
 
 type Config struct {
 	Caption string
@@ -121,3 +122,6 @@ func Exit() {
 	isRunning = false
 }
 
+func GetScreenSize() vmath.Vec3 {
+	return vmath.Vec3Create(float32(GetWidth()), float32(GetHeight()), 0.0)
+}

@@ -1,50 +1,29 @@
 package game
 
-
-//import "fmt"
 import sdl "github.com/veandco/go-sdl2/sdl"
 import "github.com/go-gl/gl/v4.1-compatibility/gl"
 import "github.com/aod6060/golang-game-space-escape/engine/vmath"
 import "github.com/aod6060/golang-game-space-escape/engine/app"
-import "github.com/aod6060/golang-game-space-escape/engine/input"
+//import "github.com/aod6060/golang-game-space-escape/engine/input"
 import "github.com/aod6060/golang-game-space-escape/engine/render"
 
-//import "github.com/aod6060/golang-game-space-escape/engine/input"
-
-
-var count int32 = 0
-
-
-var pos vmath.Vec3
-var size vmath.Vec3
-
-var speed float32 = 128.0
+var player Player
 
 func Init() {
-	pos = vmath.Vec3Create(32.0, 32.0, 0.0)
-	size = vmath.Vec3Create(32.0, 32.0, 0.0)
-
 	render.TextureCreateFromFile("player", "data/textures/player.png")
+	render.TextureCreateFromFile("bg", "data/textures/background.png")
+
 	render.FontCreateFont("font", "data/font/font.ttf", 32)
 
+	PlayerInit(&player)
 }
 
 func HandleEvent(e sdl.Event) {
 }
 
 func Update(delta float32) {
-
-	var dir vmath.Vec3 = vmath.Vec3Create(
-		input.GetKeyPressedAxis(input.KEYS_LEFT, input.KEYS_RIGHT),
-		input.GetKeyPressedAxis(input.KEYS_UP, input.KEYS_DOWN),
-		0.0)
-
-	var vel = vmath.Vec3Mul(&dir, (delta * speed))
-
-	pos = vmath.Vec3Add(&pos, &vel)
+	PlayerUpdate(&player, delta)
 }
-
-
 
 func DrawEntity(pos vmath.Vec3, size vmath.Vec3) {
 	var t, s, model vmath.Mat4
@@ -76,47 +55,74 @@ func DrawText(text string, pos vmath.Vec3) {
 	render.FontDraw("font", text)
 }
 
+func RenderBackgroundHelper(offset vmath.Vec3) {
+	var s, t, model vmath.Mat4
+
+	var screenSize = app.GetScreenSize()
+
+	var pos = vmath.Vec3Add(&player.pos, &offset)
+	t = vmath.TransformTranslate(&pos)
+
+	s = vmath.TransformScale(&screenSize)
+
+	model = vmath.Mat4MulMatrix(&s, &t)
+
+	render.SetModel(&model)
+
+	render.TextureBind("bg", gl.TEXTURE0)
+	render.DrawCenter()
+	render.TextureUnbind("bg", gl.TEXTURE0)
+}
+
+func RenderBackground() {
+	RenderBackgroundHelper(vmath.Vec3Create(-320.0, -240.0, 0.0))
+	RenderBackgroundHelper(vmath.Vec3Create(320.0, -240.0, 0.0))
+	RenderBackgroundHelper(vmath.Vec3Create(-320.0, 240.0, 0.0))
+	RenderBackgroundHelper(vmath.Vec3Create(320.0, 240.0, 0.0))
+}
+
+func HandleCamera() {
+	var r, t, view vmath.Mat4
+
+	//view = vmath.Mat4Identity()
+	var screenSize vmath.Vec3 = app.GetScreenSize()
+	var halfScreenSize vmath.Vec3 = vmath.Vec3Div(&screenSize, 2.0)
+	var offset vmath.Vec3 = vmath.Vec3Sub(&halfScreenSize, &player.pos)
+
+	t = vmath.TransformTranslate(&offset)
+	r = vmath.TransformRotationZ(vmath.ToRadian(player.rot))
+
+	view = vmath.Mat4MulMatrix(&r, &t)
+
+	render.SetView(&view)
+}
+
 func Render() {
-	render.Clear(vmath.Vec4Create(1.0, 0.0, 0.0, 1.0))
+	render.Clear(vmath.Vec4Create(0.0, 0.0, 0.0, 1.0))
 
 	render.Bind()
 
-	var proj, view vmath.Mat4
+	var proj vmath.Mat4
 
 	proj = vmath.TransformOrtho2D(0.0, float32(app.GetWidth()), float32(app.GetHeight()), 0.0)
 	render.SetProjection(&proj)
 
-	view = vmath.Mat4Identity()
-	render.SetView(&view)
+	HandleCamera()
 
-	/*
-	var t, s vmath.Mat4
-	var v vmath.Vec3
-
-	v = vmath.Vec3Create(32.0, 32.0, 0.0)
-	t = vmath.TransformTranslate(&pos)
-	s = vmath.TransformScale(&v)
-
-	model = vmath.Mat4MulMatrix(&s, &t)
-	*/
+	RenderBackground()
 
 	render.EnableBlend()
 
-	//render.SetModel(&model)
+	PlayerRender(&player)
 
-	render.TextureBind("player", gl.TEXTURE0)
-	DrawEntity(pos, size)
-	render.TextureUnbind("player", gl.TEXTURE0)
-
-	DrawText("Hello, World", vmath.Vec3Create(0.0, 0.0, 0.0))
-	
 	render.DisableBlend()
+
 	render.Unbind()
 
 }
 
 func Release() {
-
+	PlayerRelease(&player)
 }
 
 func Setup(config *app.Config) {
