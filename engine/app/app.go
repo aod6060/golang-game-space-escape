@@ -9,16 +9,28 @@ import "github.com/aod6060/golang-game-space-escape/engine/input"
 import "github.com/aod6060/golang-game-space-escape/engine/render"
 //import "github.com/aod6060/golang-game-space-escape/engine/vmath"
 
+
+type IApp interface {
+	Init()
+	HandleEvent(e sdl.Event)
+	Update(delta float32)
+	Render()
+	Release()
+}
+
 type Config struct {
 	Caption string
 	Width int32
 	Height int32
+	App IApp
 
+	/*
 	InitCB func()
 	HandleEventCB func(e sdl.Event)
 	UpdateCB func(delta float32)
 	RenderCB func()
 	ReleaseCB func()
+	*/
 }
 
 
@@ -63,7 +75,8 @@ func Init(_conf *Config) {
 	input.Init()
 	render.Init()
 
-	conf.InitCB()
+	//conf.InitCB()
+	conf.App.Init()
 }
 
 func Update() {
@@ -83,11 +96,17 @@ func Update() {
 			}
 
 			input.HandleEvent(event)
-			conf.HandleEventCB(event)
+			//conf.HandleEventCB(event)
+			conf.App.HandleEvent(event)
 		}
 
+		/*
 		conf.UpdateCB(delta)
 		conf.RenderCB()
+		*/
+
+		conf.App.Update(delta)
+		conf.App.Render()
 
 		input.Update()
 
@@ -96,7 +115,8 @@ func Update() {
 }
 
 func Release() {
-	conf.ReleaseCB()
+	//conf.ReleaseCB()
+	conf.App.Release()
 
 	render.Release()
 	input.Release()

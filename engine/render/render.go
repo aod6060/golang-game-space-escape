@@ -147,7 +147,7 @@ func Release() {
 	gl.DeleteShader(mainVertexShader)
 }
 
-func Clear(color vmath.Vec4) {
+func Clear(color *vmath.Vec4) {
 	gl.ClearColor(color.X, color.Y, color.Z, color.W)
 	gl.Clear(gl.COLOR_BUFFER_BIT)
 }
@@ -161,17 +161,17 @@ func Unbind() {
 }
 
 func SetProjection(m *vmath.Mat4) {
-	var cm []float32 = vmath.Mat4ToArray(m)
+	var cm []float32 = m.ToArray()
 	gl.UniformMatrix4fv(uProj, 1, false, &cm[0])
 }
 
 func SetView(m *vmath.Mat4) {
-	var cm []float32 = vmath.Mat4ToArray(m)
+	var cm []float32 = m.ToArray()
 	gl.UniformMatrix4fv(uView, 1, false, &cm[0])
 }
 
 func SetModel(m *vmath.Mat4) {
-	var cm []float32 = vmath.Mat4ToArray(m)
+	var cm []float32 = m.ToArray()
 	gl.UniformMatrix4fv(uModel, 1, false, &cm[0])
 }
 
