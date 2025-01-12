@@ -7,108 +7,96 @@ type Mat2 struct {
 	M10, M11 float32
 }
 
-func Mat2Create(m00 float32, m01 float32, m10 float32, m11 float32) Mat2 {
-	var temp Mat2
-	temp.M00 = m00
-	temp.M01 = m01
-	temp.M10 = m10
-	temp.M11 = m11
-	return temp
+func CreateMat2(m00 float32, m01 float32, m10 float32, m11 float32) *Mat2 {
+	return &Mat2{
+		m00, m01,
+		m10, m11}
 }
 
-func Mat2Identiy() Mat2 {
-	return Mat2Create(
+func CreateMat2Identity() *Mat2 {
+	return CreateMat2(
 		1.0, 0.0,
 		0.0, 1.0)
 }
 
-func Mat2Add(a *Mat2, b *Mat2) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00 + b.M00
-	temp.M01 = a.M01 + b.M01
-	temp.M10 = a.M10 + b.M10
-	temp.M11 = a.M11 + b.M11
-	return temp
+func CreateMat2Zero() *Mat2 {
+	return CreateMat2(
+		0.0, 0.0,
+		0.0, 0.0)
 }
 
-func Mat2Sub(a *Mat2, b *Mat2) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00 - b.M00
-	temp.M01 = a.M01 - b.M01
-	temp.M10 = a.M10 - b.M10
-	temp.M11 = a.M11 - b.M11
-	return temp
+func (this *Mat2) Add(other *Mat2) *Mat2 {
+	return CreateMat2(
+		this.M00 + other.M00,
+		this.M01 + other.M01,
+		this.M10 + other.M10,
+		this.M11 + other.M11)
 }
 
-func Mat2MulScalar(a *Mat2, s float32) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00 * s
-	temp.M01 = a.M01 * s
-	temp.M10 = a.M10 * s
-	temp.M11 = a.M11 * s
-	return temp
+func (this *Mat2) Sub(other *Mat2) *Mat2 {
+	return CreateMat2(
+		this.M00 + other.M00,
+		this.M01 + other.M01,
+		this.M10 + other.M10,
+		this.M11 + other.M11)
 }
 
-func Mat2DivScalar(a *Mat2, s float32) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00 / s
-	temp.M01 = a.M01 / s
-	temp.M10 = a.M10 / s
-	temp.M11 = a.M11 / s
-	return temp	
+func (this *Mat2) MulScalar(f float32) *Mat2 {
+	return CreateMat2(
+		this.M00 * f,
+		this.M01 * f,
+		this.M10 * f,
+		this.M11 * f)
 }
 
-func Mat2MulMatrix(a *Mat2, b *Mat2) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00 * b.M00 + a.M01 * b.M10
-	temp.M01 = a.M00 * b.M01 + a.M01 * b.M11
-	temp.M10 = a.M10 * b.M00 + a.M11 * b.M10
-	temp.M11 = a.M10 * b.M01 + a.M11 * b.M11
-	return temp		
+func (this *Mat2) DivScalar(f float32) *Mat2 {
+	return CreateMat2(
+		this.M00 / f,
+		this.M01 / f,
+		this.M10 / f,
+		this.M11 / f)
 }
 
-func Mat2Transpose(a *Mat2) Mat2 {
-	var temp Mat2
-	temp.M00 = a.M00
-	temp.M01 = a.M10
-	temp.M10 = a.M01
-	temp.M11 = a.M11
-	return temp
+func (this *Mat2) Mul(other *Mat2) *Mat2 {
+	return CreateMat2(
+		this.M00 * other.M00 + this.M01 * other.M10,
+		this.M00 * other.M01 + this.M01 * other.M11,
+		this.M10 * other.M00 + this.M11 * other.M10,
+		this.M10 * other.M01 + this.M11 * other.M11)
 }
 
-func Mat2Trace(a *Mat2) float32 {
-	return a.M00 + a.M11
+func (this *Mat2) Transpose() *Mat2 {
+	return CreateMat2(
+		this.M00, this.M10,
+		this.M01, this.M11)
 }
 
-func Mat2Det(a *Mat2) float32 {
-	return a.M00 * a.M11 - a.M01 * a.M10
+func (this *Mat2) Trace() float32 {
+	return this.M00 + this.M11
 }
 
-func Mat2Inverse(a *Mat2) Mat2 {
-	var temp Mat2
-
-	temp.M00 = a.M11
-	temp.M01 = -a.M01
-	temp.M10 = -a.M10
-	temp.M11 = a.M00
-
-	return Mat2DivScalar(&temp, Mat2Det(&temp))
+func (this *Mat2) Det() float32 {
+	return this.M00 * this.M11 - this.M01 * this.M10
 }
 
-func Mat2MulVec2(a *Mat2, b *Vec2) Vec2 {
-	var temp Vec2
-
-	temp.X = a.M00 * b.X + a.M01 * b.Y
-	temp.Y = a.M10 * b.X + a.M11 * b.Y
-
-	return temp
+func (this *Mat2) Inverse() *Mat2 {
+	var temp *Mat2 = CreateMat2(
+		this.M11, -this.M01,
+		-this.M10, this.M00)
+	return temp.DivScalar(this.Det())
 }
 
-func Mat2ToArray(a *Mat2) []float32 {
+func (this *Mat2) MulVec2(v *Vec2) *Vec2 {
+	return CreateVec2(
+		this.M00 * v.X + this.M01 * v.Y,
+		this.M10 * v.X + this.M11 * v.Y)
+}
+
+func (this *Mat2) ToArray() []float32 {
 	var temp []float32
-	temp = append(temp, a.M00)
-	temp = append(temp, a.M01)
-	temp = append(temp, a.M10)
-	temp = append(temp, a.M11)
+	temp = append(temp, this.M00)
+	temp = append(temp, this.M01)
+	temp = append(temp, this.M10)
+	temp = append(temp, this.M11)
 	return temp
 }

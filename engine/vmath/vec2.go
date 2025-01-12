@@ -2,69 +2,69 @@ package vmath
 
 import "math"
 
+
+
 type Vec2 struct {
 	X, Y float32
 }
 
+/*
+	For Conviense
+*/
+func CreateVec2(x float32, y float32) *Vec2 {
+	return &Vec2{x, y}
+}
 
-// I'll just treat it like C
-func Vec2Create(x float32, y float32) Vec2 {
+func (this *Vec2) Add(other *Vec2) *Vec2 {
 	var temp Vec2
-	temp.X = x
-	temp.Y = y
-	return temp
+	temp.X = this.X + other.X
+	temp.Y = this.Y + other.Y
+	return &temp
 }
 
-func Vec2Add(a *Vec2, b *Vec2) Vec2 {
+func (this *Vec2) Sub(other *Vec2) *Vec2 {
 	var temp Vec2
-	temp.X = a.X + b.X
-	temp.Y = a.Y + b.Y
-	return temp
+	temp.X = this.X - other.X
+	temp.Y = this.Y - other.Y
+	return &temp
 }
 
-func Vec2Sub(a *Vec2, b *Vec2) Vec2 {
+func (this *Vec2) Mul(f float32) *Vec2 {
 	var temp Vec2
-	temp.X = a.X - b.X
-	temp.Y = a.Y - b.Y
-	return temp
+	temp.X = this.X * f
+	temp.Y = this.Y * f
+	return &temp
 }
 
-func Vec2Mul(a *Vec2, b float32) Vec2 {
+func (this *Vec2) Div(f float32) *Vec2 {
 	var temp Vec2
-	temp.X = a.X * b
-	temp.Y = a.Y * b
-	return temp
+	temp.X = this.X / f
+	temp.Y = this.Y / f
+	return &temp
 }
 
-func Vec2Div(a *Vec2, b float32) Vec2 {
-	var temp Vec2
-	temp.X = a.X / b
-	temp.Y = a.Y / b
-	return temp
+func (this *Vec2) Length() float32 {
+	return float32(math.Sqrt(float64(this.X * this.X + this.Y * this.Y)))
 }
 
-func Vec2Length(a *Vec2) float32 {
-	return float32(math.Sqrt(float64(a.X * a.X + a.Y * a.Y)))
+func (this *Vec2) Normalize() *Vec2 {
+	return this.Div(this.Length())
 }
 
-func Vec2Normalize(a *Vec2) Vec2 {
-	return Vec2Div(a, Vec2Length(a))
+func (this *Vec2) Dot(other *Vec2) float32 {
+	return this.X * other.X + this.Y * other.Y
 }
 
-func Vec2Dot(a *Vec2, b *Vec2) float32 {
-	return a.X * b.X + a.Y * b.Y
+func (this *Vec2) Angle(other *Vec2) float32 {
+	var d = this.Dot(other)
+	var al = this.Length()
+	var bl = other.Length()
+	return float32(math.Acos(float64(d / (al * bl))))
 }
 
-func Vec2Angle(a *Vec2, b *Vec2) float32 {
-	var d float32 = Vec2Dot(a, b)
-	var la float32 = Vec2Length(a)
-	var lb float32 = Vec2Length(b)
-	return float32(math.Acos(float64(d / (la * lb))))
-}
-
-func Vec2ToArray(a *Vec2) []float32 {
+func (this *Vec2) ToArray() []float32 {
 	var temp []float32
-	temp = append(temp, a.X)
-	temp = append(temp, a.Y)
+	temp = append(temp, this.X)
+	temp = append(temp, this.Y)
 	return temp
 }

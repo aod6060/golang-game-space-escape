@@ -1,5 +1,7 @@
 package vmath
 
+//import "fmt"
+
 type Mat4 struct {
 	M00, M01, M02, M03 float32
 	M10, M11, M12, M13 float32
@@ -7,410 +9,299 @@ type Mat4 struct {
 	M30, M31, M32, M33 float32
 }
 
-func Mat4Create(
+func CreateMat4(
 	m00 float32, m01 float32, m02 float32, m03 float32,
 	m10 float32, m11 float32, m12 float32, m13 float32,
 	m20 float32, m21 float32, m22 float32, m23 float32,
-	m30 float32, m31 float32, m32 float32, m33 float32) Mat4 {
-	
-	var temp Mat4
-	temp.M00 = m00
-	temp.M01 = m01
-	temp.M02 = m02
-	temp.M03 = m03
-
-	temp.M10 = m10
-	temp.M11 = m11
-	temp.M12 = m12
-	temp.M13 = m13
-
-	temp.M20 = m20
-	temp.M21 = m21
-	temp.M22 = m22
-	temp.M23 = m23
-
-	temp.M30 = m30
-	temp.M31 = m31
-	temp.M32 = m32
-	temp.M33 = m33
-
-	return temp
+	m30 float32, m31 float32, m32 float32, m33 float32) *Mat4 {
+	return &Mat4 {
+		m00, m01, m02, m03,
+		m10, m11, m12, m13,
+		m20, m21, m22, m23,
+		m30, m31, m32, m33}
 }
 
-func Mat4Identity() Mat4 {
-	return Mat4Create(
+func CreateMat4Identity() *Mat4 {
+	return CreateMat4(
 		1.0, 0.0, 0.0, 0.0,
 		0.0, 1.0, 0.0, 0.0,
 		0.0, 0.0, 1.0, 0.0,
 		0.0, 0.0, 0.0, 1.0)
 }
 
-func Mat4Add(a *Mat4, b *Mat4) Mat4 {
-	var temp Mat4
-
-	temp.M00 = a.M00 + b.M00
-	temp.M01 = a.M01 + b.M01
-	temp.M02 = a.M02 + b.M02
-	temp.M03 = a.M03 + b.M03
-
-	temp.M10 = a.M10 + b.M10
-	temp.M11 = a.M11 + b.M11
-	temp.M12 = a.M12 + b.M12
-	temp.M13 = a.M13 + b.M13
-
-	temp.M20 = a.M20 + b.M20
-	temp.M21 = a.M21 + b.M21
-	temp.M22 = a.M22 + b.M22
-	temp.M23 = a.M23 + b.M23
-
-	temp.M30 = a.M30 + b.M30
-	temp.M31 = a.M31 + b.M31
-	temp.M32 = a.M32 + b.M32
-	temp.M33 = a.M33 + b.M33
-
-	return temp
+func CreateMat4Zero() *Mat4 {
+	return CreateMat4(
+		0.0, 0.0, 0.0, 0.0,
+		0.0, 0.0, 0.0, 0.0,
+		0.0, 0.0, 0.0, 0.0,
+		0.0, 0.0, 0.0, 0.0)
 }
 
-func Mat4Sub(a *Mat4, b *Mat4) Mat4 {
-	var temp Mat4
-
-	temp.M00 = a.M00 - b.M00
-	temp.M01 = a.M01 - b.M01
-	temp.M02 = a.M02 - b.M02
-	temp.M03 = a.M03 - b.M03
-
-	temp.M10 = a.M10 - b.M10
-	temp.M11 = a.M11 - b.M11
-	temp.M12 = a.M12 - b.M12
-	temp.M13 = a.M13 - b.M13
-
-	temp.M20 = a.M20 - b.M20
-	temp.M21 = a.M21 - b.M21
-	temp.M22 = a.M22 - b.M22
-	temp.M23 = a.M23 - b.M23
-
-	temp.M30 = a.M30 - b.M30
-	temp.M31 = a.M31 - b.M31
-	temp.M32 = a.M32 - b.M32
-	temp.M33 = a.M33 - b.M33
-
-	return temp
+func (this *Mat4) Add(other *Mat4) *Mat4 {
+	return CreateMat4(
+		this.M00 + other.M00,
+		this.M01 + other.M01,
+		this.M02 + other.M02,
+		this.M03 + other.M03,
+		this.M10 + other.M10,
+		this.M11 + other.M11,
+		this.M12 + other.M12,
+		this.M13 + other.M13,
+		this.M20 + other.M20,
+		this.M21 + other.M21,
+		this.M22 + other.M22,
+		this.M23 + other.M23,
+		this.M30 + other.M30,
+		this.M31 + other.M31,
+		this.M32 + other.M32,
+		this.M33 + other.M33)
 }
 
-func Mat4MulScalar(a *Mat4, s float32) Mat4 {
-	var temp Mat4
-
-	temp.M00 = a.M00 * s
-	temp.M01 = a.M01 * s
-	temp.M02 = a.M02 * s
-	temp.M03 = a.M03 * s
-
-	temp.M10 = a.M10 * s
-	temp.M11 = a.M11 * s
-	temp.M12 = a.M12 * s
-	temp.M13 = a.M13 * s
-
-	temp.M20 = a.M20 * s
-	temp.M21 = a.M21 * s
-	temp.M22 = a.M22 * s
-	temp.M23 = a.M23 * s
-
-	temp.M30 = a.M30 * s
-	temp.M31 = a.M31 * s
-	temp.M32 = a.M32 * s
-	temp.M33 = a.M33 * s
-
-	return temp
+func (this *Mat4) Sub(other *Mat4) *Mat4 {
+	return CreateMat4(
+		this.M00 - other.M00,
+		this.M01 - other.M01,
+		this.M02 - other.M02,
+		this.M03 - other.M03,
+		this.M10 - other.M10,
+		this.M11 - other.M11,
+		this.M12 - other.M12,
+		this.M13 - other.M13,
+		this.M20 - other.M20,
+		this.M21 - other.M21,
+		this.M22 - other.M22,
+		this.M23 - other.M23,
+		this.M30 - other.M30,
+		this.M31 - other.M31,
+		this.M32 - other.M32,
+		this.M33 - other.M33)
 }
 
-func Mat4DivScalar(a *Mat4, s float32) Mat4 {
-	var temp Mat4
-
-	temp.M00 = a.M00 / s
-	temp.M01 = a.M01 / s
-	temp.M02 = a.M02 / s
-	temp.M03 = a.M03 / s
-
-	temp.M10 = a.M10 / s
-	temp.M11 = a.M11 / s
-	temp.M12 = a.M12 / s
-	temp.M13 = a.M13 / s
-
-	temp.M20 = a.M20 / s
-	temp.M21 = a.M21 / s
-	temp.M22 = a.M22 / s
-	temp.M23 = a.M23 / s
-
-	temp.M30 = a.M30 / s
-	temp.M31 = a.M31 / s
-	temp.M32 = a.M32 / s
-	temp.M33 = a.M33 / s
-
-	return temp
+func (this *Mat4) MulScalar(f float32) *Mat4 {
+	return CreateMat4(
+		this.M00 * f,
+		this.M01 * f,
+		this.M02 * f,
+		this.M03 * f,
+		this.M10 * f,
+		this.M11 * f,
+		this.M12 * f,
+		this.M13 * f,
+		this.M20 * f,
+		this.M21 * f,
+		this.M22 * f,
+		this.M23 * f,
+		this.M30 * f,
+		this.M31 * f,
+		this.M32 * f,
+		this.M33 * f)
 }
 
-func Mat4MulMatrix(a *Mat4, b *Mat4) Mat4 {
-	var temp Mat4
+func (this *Mat4) DivScalar(f float32) *Mat4 {
+	return CreateMat4(
+		this.M00 / f,
+		this.M01 / f,
+		this.M02 / f,
+		this.M03 / f,
 
-	// Row 1
-	temp.M00 = a.M00 * b.M00 + a.M01 * b.M10 + a.M02 * b.M20 + a.M03 * b.M30
-	temp.M01 = a.M00 * b.M01 + a.M01 * b.M11 + a.M02 * b.M21 + a.M03 * b.M31
-	temp.M02 = a.M00 * b.M02 + a.M01 * b.M12 + a.M02 * b.M22 + a.M03 * b.M32
-	temp.M03 = a.M00 * b.M03 + a.M01 * b.M13 + a.M02 * b.M23 + a.M03 * b.M33
+		this.M10 / f,
+		this.M11 / f,
+		this.M12 / f,
+		this.M13 / f,
 
-	// Row 2
-	temp.M10 = a.M10 * b.M00 + a.M11 * b.M10 + a.M12 * b.M20 + a.M13 * b.M30
-	temp.M11 = a.M10 * b.M01 + a.M11 * b.M11 + a.M12 * b.M21 + a.M13 * b.M31
-	temp.M12 = a.M10 * b.M02 + a.M11 * b.M12 + a.M12 * b.M22 + a.M13 * b.M32
-	temp.M13 = a.M10 * b.M03 + a.M11 * b.M13 + a.M12 * b.M23 + a.M13 * b.M33
+		this.M20 / f,
+		this.M21 / f,
+		this.M22 / f,
+		this.M23 / f,
 
-	// Row 3
-	temp.M20 = a.M20 * b.M00 + a.M21 * b.M10 + a.M22 * b.M20 + a.M23 * b.M30
-	temp.M21 = a.M20 * b.M01 + a.M21 * b.M11 + a.M22 * b.M21 + a.M23 * b.M31
-	temp.M22 = a.M20 * b.M02 + a.M21 * b.M12 + a.M22 * b.M22 + a.M23 * b.M32
-	temp.M23 = a.M20 * b.M03 + a.M21 * b.M13 + a.M22 * b.M23 + a.M23 * b.M33
-
-	// Row 4
-	temp.M30 = a.M30 * b.M00 + a.M31 * b.M10 + a.M32 * b.M20 + a.M33 * b.M30
-	temp.M31 = a.M30 * b.M01 + a.M31 * b.M11 + a.M32 * b.M21 + a.M33 * b.M31
-	temp.M32 = a.M30 * b.M02 + a.M31 * b.M12 + a.M32 * b.M22 + a.M33 * b.M32
-	temp.M33 = a.M30 * b.M03 + a.M31 * b.M13 + a.M32 * b.M23 + a.M33 * b.M33
-
-	return temp
+		this.M30 / f,
+		this.M31 / f,
+		this.M32 / f,
+		this.M33 / f)
 }
 
-func Mat4Transpose(a *Mat4) Mat4 {
-	var temp Mat4
-	
-	// Row 1
-	temp.M00 = a.M00
-	temp.M01 = a.M10
-	temp.M02 = a.M20
-	temp.M03 = a.M30
-
-	// Row 2
-	temp.M10 = a.M01
-	temp.M11 = a.M11
-	temp.M12 = a.M21
-	temp.M13 = a.M31
-
-	// Row 3
-	temp.M20 = a.M02
-	temp.M21 = a.M12
-	temp.M22 = a.M22
-	temp.M23 = a.M32
-
-	// Row 4
-	temp.M30 = a.M03
-	temp.M31 = a.M13
-	temp.M32 = a.M23
-	temp.M33 = a.M33
-
-	return temp
+func (this *Mat4) Mul(other *Mat4) *Mat4 {
+	return CreateMat4(
+		this.M00 * other.M00 + this.M01 * other.M10 + this.M02 * other.M20 + this.M03 * other.M30,
+		this.M00 * other.M01 + this.M01 * other.M11 + this.M02 * other.M21 + this.M03 * other.M31,
+		this.M00 * other.M02 + this.M01 * other.M12 + this.M02 * other.M22 + this.M03 * other.M32,
+		this.M00 * other.M03 + this.M01 * other.M13 + this.M02 * other.M23 + this.M03 * other.M33,
+		
+		this.M10 * other.M00 + this.M11 * other.M10 + this.M12 * other.M20 + this.M13 * other.M30,
+		this.M10 * other.M01 + this.M11 * other.M11 + this.M12 * other.M21 + this.M13 * other.M31,
+		this.M10 * other.M02 + this.M11 * other.M12 + this.M12 * other.M22 + this.M13 * other.M32,
+		this.M10 * other.M03 + this.M11 * other.M13 + this.M12 * other.M23 + this.M13 * other.M33,
+		
+		this.M20 * other.M00 + this.M21 * other.M10 + this.M22 * other.M20 + this.M23 * other.M30,
+		this.M20 * other.M01 + this.M21 * other.M11 + this.M22 * other.M21 + this.M23 * other.M31,
+		this.M20 * other.M02 + this.M21 * other.M12 + this.M22 * other.M22 + this.M23 * other.M32,
+		this.M20 * other.M03 + this.M21 * other.M13 + this.M22 * other.M23 + this.M23 * other.M33,
+		
+		this.M30 * other.M00 + this.M31 * other.M10 + this.M32 * other.M20 + this.M33 * other.M30,
+		this.M30 * other.M01 + this.M31 * other.M11 + this.M32 * other.M21 + this.M33 * other.M31,
+		this.M30 * other.M02 + this.M31 * other.M12 + this.M32 * other.M22 + this.M33 * other.M32,
+		this.M30 * other.M03 + this.M31 * other.M13 + this.M32 * other.M23 + this.M33 * other.M33,
+	)
 }
 
-func Mat4Trace(a *Mat4) float32 {
-	return a.M00 + a.M11 + a.M22 + a.M33
+func (this *Mat4) Transpose() *Mat4 {
+	return CreateMat4(
+		this.M00, this.M10, this.M20, this.M30,
+		this.M01, this.M11, this.M21, this.M31,
+		this.M02, this.M12, this.M22, this.M32,
+		this.M03, this.M13, this.M23, this.M33,
+	)
 }
 
-func Mat4Det(a *Mat4) float32 {
-	/*
-		M00 M01 M02 M03
-		M10 M11 M12 M13
-		M20 M21 M22 M23
-		M30 M31 M32 M33
-	*/
-
-	var ma, mb, mc, md Mat3
-
-	ma = Mat3Create(
-		a.M11, a.M12, a.M13,
-		a.M21, a.M22, a.M23,
-		a.M31, a.M32, a.M33)
-
-	mb = Mat3Create(
-		a.M10, a.M12, a.M13,
-		a.M20, a.M22, a.M23,
-		a.M30, a.M32, a.M33)
-
-	mc = Mat3Create(
-		a.M10, a.M11, a.M13,
-		a.M20, a.M21, a.M23,
-		a.M30, a.M31, a.M33)
-
-	md = Mat3Create(
-		a.M10, a.M11, a.M12,
-		a.M20, a.M21, a.M22,
-		a.M30, a.M31, a.M32)
-
-	return a.M00 * Mat3Det(&ma) - a.M01 * Mat3Det(&mb) + a.M02 * Mat3Det(&mc) - a.M03 * Mat3Det(&md)
+func (this *Mat4) Trace() float32 {
+	return this.M00 + this.M11 + this.M22 + this.M33
 }
 
-func Mat4Inverse(mat *Mat4) Mat4 {
-	/*
-		M00 M01 M02 M03
-		M10 M11 M12 M13
-		M20 M21 M22 M23
-		M30 M31 M32 M33
-	*/
+func (this *Mat4) Det() float32 {
+	var ma, mb, mc, md *Mat3
 
-	var det float32 = Mat4Det(mat)
+	ma = CreateMat3(
+		this.M11, this.M12, this.M13,
+		this.M21, this.M22, this.M23,
+		this.M31, this.M32, this.M33)
 
-	var a, b, c, d Mat3
-	var e, f, g, h Mat3
-	var i, j, k, l Mat3
-	var m, n, o, p Mat3
+	mb = CreateMat3(
+		this.M10, this.M12, this.M13,
+		this.M20, this.M22, this.M23,
+		this.M30, this.M32, this.M33)
 
-	// Row 1
-	a = Mat3Create(
-		mat.M11, mat.M12, mat.M13,
-		mat.M21, mat.M22, mat.M23,
-		mat.M31, mat.M32, mat.M33,
-	)
+	mc = CreateMat3(
+		this.M10, this.M11, this.M13,
+		this.M20, this.M21, this.M23,
+		this.M30, this.M31, this.M33)
 
-	b = Mat3Create(
-		mat.M10, mat.M12, mat.M13,
-		mat.M20, mat.M22, mat.M23,
-		mat.M30, mat.M32, mat.M33,
-	)
+	md = CreateMat3(
+		this.M10, this.M11, this.M12,
+		this.M20, this.M21, this.M22,
+		this.M30, this.M31, this.M32)
 
-	c = Mat3Create(
-		mat.M10, mat.M11, mat.M13,
-		mat.M20, mat.M21, mat.M23,
-		mat.M30, mat.M31, mat.M33,
-	)
-
-	d = Mat3Create(
-		mat.M10, mat.M11, mat.M12,
-		mat.M20, mat.M21, mat.M22,
-		mat.M30, mat.M31, mat.M32,
-	)
-
-	// Row 2
-	e = Mat3Create(
-		mat.M01, mat.M02, mat.M03,
-		mat.M21, mat.M22, mat.M23,
-		mat.M31, mat.M32, mat.M33,
-	)
-
-	f = Mat3Create(
-		mat.M00, mat.M02, mat.M03,
-		mat.M20, mat.M22, mat.M23,
-		mat.M30, mat.M32, mat.M33,
-	)
-
-	g = Mat3Create(
-		mat.M00, mat.M01, mat.M03,
-		mat.M20, mat.M21, mat.M23,
-		mat.M30, mat.M31, mat.M33,
-	)
-
-	h = Mat3Create(
-		mat.M00, mat.M01, mat.M02,
-		mat.M20, mat.M21, mat.M22,
-		mat.M30, mat.M31, mat.M32,
-	)
-
-	// Row 3
-	i = Mat3Create(
-		mat.M01, mat.M02, mat.M03,
-		mat.M11, mat.M12, mat.M13,
-		mat.M31, mat.M32, mat.M33,
-	)
-
-	j = Mat3Create(
-		mat.M00, mat.M02, mat.M03,
-		mat.M10, mat.M12, mat.M13,
-		mat.M30, mat.M32, mat.M33,
-	)
-
-	k = Mat3Create(
-		mat.M00, mat.M01, mat.M03,
-		mat.M10, mat.M11, mat.M13,
-		mat.M30, mat.M31, mat.M33,
-	)
-
-	l = Mat3Create(
-		mat.M00, mat.M01, mat.M02,
-		mat.M10, mat.M11, mat.M12,
-		mat.M30, mat.M31, mat.M32,
-	)
-
-	// Row 4
-	m = Mat3Create(
-		mat.M01, mat.M02, mat.M03,
-		mat.M11, mat.M12, mat.M13,
-		mat.M21, mat.M22, mat.M23,
-	)
-
-	n = Mat3Create(
-		mat.M00, mat.M02, mat.M03,
-		mat.M10, mat.M12, mat.M13,
-		mat.M20, mat.M22, mat.M23,
-	)
-
-	o = Mat3Create(
-		mat.M00, mat.M01, mat.M03,
-		mat.M10, mat.M11, mat.M13,
-		mat.M20, mat.M21, mat.M23,
-	)
-
-	p = Mat3Create(
-		mat.M00, mat.M01, mat.M02,
-		mat.M10, mat.M11, mat.M12,
-		mat.M20, mat.M21, mat.M22,
-	)
-
-	/*
-		M00 -M01 M02 -M03
-		-M10 M11 -M12 M13
-		M20 -M21 M22 -M23
-		-M30 M31 -M32 M33
-	*/
-
-	var temp Mat4 = Mat4Create(
-		Mat3Det(&a), -Mat3Det(&b), Mat3Det(&c), -Mat3Det(&d), 
-		-Mat3Det(&e), Mat3Det(&f), -Mat3Det(&g), Mat3Det(&h), 
-		Mat3Det(&i), -Mat3Det(&j), Mat3Det(&k), -Mat3Det(&l), 
-		-Mat3Det(&m), Mat3Det(&n), -Mat3Det(&o), Mat3Det(&p))
-
-	var temp2 = Mat4Transpose(&temp)
-
-	return Mat4DivScalar(&temp2, det)
+	return this.M00 * ma.Det() - this.M01 * mb.Det() + this.M02 * mc.Det() - this.M03 * md.Det()
 }
 
-func Mat4MulVec4(m *Mat4, v *Vec4) Vec4 {
-	var temp Vec4
+func (this *Mat4) Inverse() *Mat4 {
+	return CreateMat4(
+		// Row 1
+		CreateMat3(
+			this.M11, this.M12, this.M13, 
+			this.M21, this.M22, this.M23, 
+			this.M31, this.M32, this.M33).Det(),
 
-	temp.X = m.M00 * v.X + m.M01 * v.Y + m.M02 * v.Z + m.M03 * v.W
-	temp.Y = m.M10 * v.X + m.M11 * v.Y + m.M12 * v.Z + m.M13 * v.W
-	temp.Z = m.M20 * v.X + m.M21 * v.Y + m.M22 * v.Z + m.M23 * v.W
-	temp.W = m.M30 * v.X + m.M31 * v.Y + m.M32 * v.Z + m.M33 * v.W
+		-CreateMat3(
+			this.M10, this.M12, this.M13, 
+			this.M20, this.M22, this.M23, 
+			this.M30, this.M32, this.M33).Det(),
 
-	return temp
+		CreateMat3(
+			this.M10, this.M11, this.M13, 
+			this.M20, this.M21, this.M23, 
+			this.M30, this.M31, this.M33).Det(),
+
+		-CreateMat3(
+			this.M10, this.M11, this.M12, 
+			this.M20, this.M21, this.M22, 
+			this.M30, this.M31, this.M32).Det(),
+
+		// Row 2
+		-CreateMat3(
+			this.M01, this.M02, this.M03, 
+			this.M21, this.M22, this.M23, 
+			this.M31, this.M32, this.M33).Det(),
+
+		CreateMat3(
+			this.M00, this.M02, this.M03, 
+			this.M20, this.M22, this.M23, 
+			this.M30, this.M32, this.M33).Det(),
+
+		-CreateMat3(
+			this.M00, this.M01, this.M03, 
+			this.M20, this.M21, this.M23, 
+			this.M30, this.M31, this.M33).Det(),
+
+		CreateMat3(
+			this.M00, this.M01, this.M02, 
+			this.M20, this.M21, this.M22, 
+			this.M30, this.M31, this.M32).Det(),
+		
+		// Row 3
+		CreateMat3(
+			this.M01, this.M02, this.M03, 
+			this.M11, this.M12, this.M13, 
+			this.M31, this.M32, this.M33).Det(),
+
+		-CreateMat3(
+			this.M00, this.M02, this.M03,
+			this.M10, this.M12, this.M13, 
+			this.M30, this.M32, this.M33).Det(),
+
+		CreateMat3(
+			this.M00, this.M01, this.M03, 
+			this.M10, this.M11, this.M13, 
+			this.M30, this.M31, this.M33).Det(),
+
+		-CreateMat3(
+			this.M00, this.M01, this.M02, 
+			this.M10, this.M11, this.M12, 
+			this.M30, this.M31, this.M32).Det(),
+		
+		// Row 4
+		-CreateMat3(
+			this.M01, this.M02, this.M03, 
+			this.M11, this.M12, this.M13, 
+			this.M21, this.M22, this.M23).Det(),
+
+		CreateMat3(
+			this.M00, this.M02, this.M03, 
+			this.M10, this.M12, this.M13, 
+			this.M20, this.M22, this.M23).Det(),
+
+		-CreateMat3(
+			this.M00, this.M01, this.M03, 
+			this.M10, this.M11, this.M13, 
+			this.M20, this.M21, this.M23).Det(),
+
+		CreateMat3(
+			this.M00, this.M01, this.M02, 
+			this.M10, this.M11, this.M12, 
+			this.M20, this.M21, this.M22).Det(),
+
+	).Transpose().DivScalar(this.Det())
 }
 
-func Mat4ToArray(m *Mat4) []float32 {
+func (this *Mat4) MulVec4(v *Vec4) *Vec4 {
+	return CreateVec4(
+		this.M00 * v.X + this.M01 * v.Y + this.M02 * v.Z + this.M03 * v.W,
+		this.M10 * v.X + this.M11 * v.Y + this.M12 * v.Z + this.M13 * v.W,
+		this.M20 * v.X + this.M21 * v.Y + this.M22 * v.Z + this.M23 * v.W,
+		this.M30 * v.X + this.M31 * v.Y + this.M32 * v.Z + this.M33 * v.W,
+	)
+}
+
+func (this *Mat4) ToArray() []float32 {
 	var temp []float32
-	temp = append(temp, m.M00)
-	temp = append(temp, m.M01)
-	temp = append(temp, m.M02)
-	temp = append(temp, m.M03)
+	temp = append(temp, this.M00)
+	temp = append(temp, this.M01)
+	temp = append(temp, this.M02)
+	temp = append(temp, this.M03)
 
-	temp = append(temp, m.M10)
-	temp = append(temp, m.M11)
-	temp = append(temp, m.M12)
-	temp = append(temp, m.M13)
+	temp = append(temp, this.M10)
+	temp = append(temp, this.M11)
+	temp = append(temp, this.M12)
+	temp = append(temp, this.M13)
 
-	temp = append(temp, m.M20)
-	temp = append(temp, m.M21)
-	temp = append(temp, m.M22)
-	temp = append(temp, m.M23)
+	temp = append(temp, this.M20)
+	temp = append(temp, this.M21)
+	temp = append(temp, this.M22)
+	temp = append(temp, this.M23)
 
-	temp = append(temp, m.M30)
-	temp = append(temp, m.M31)
-	temp = append(temp, m.M32)
-	temp = append(temp, m.M33)
+	temp = append(temp, this.M30)
+	temp = append(temp, this.M31)
+	temp = append(temp, this.M32)
+	temp = append(temp, this.M33)
 
 	return temp
 }

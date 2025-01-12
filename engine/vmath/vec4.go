@@ -6,75 +6,67 @@ type Vec4 struct {
 	X, Y, Z, W float32
 }
 
-func Vec4Create(x float32, y float32, z float32, w float32) Vec4 {
-	var temp Vec4
-	temp.X = x
-	temp.Y = y
-	temp.Z = z
-	temp.W = w
-	return temp
+
+func CreateVec4(x float32, y float32, z float32, w float32) *Vec4 {
+	return &Vec4{x, y, z, w}
 }
 
-func Vec4Add(a *Vec4, b *Vec4) Vec4 {
-	var temp Vec4
-	temp.X = a.X + b.X
-	temp.Y = a.Y + b.Y
-	temp.Z = a.Z + b.Z
-	temp.W = a.W + b.W
-	return temp
+func (this *Vec4) Add(other *Vec4) *Vec4 {
+	return CreateVec4(
+		this.X + other.X,
+		this.Y + other.Y,
+		this.Z + other.Z,
+		this.W + other.W)
 }
 
-func Vec4Sub(a *Vec4, b *Vec4) Vec4 {
-	var temp Vec4
-	temp.X = a.X - b.X
-	temp.Y = a.Y - b.Y
-	temp.Z = a.Z - b.Z
-	temp.W = a.W - b.W
-	return temp
+func (this *Vec4) Sub(other *Vec4) *Vec4 {
+	return CreateVec4(
+		this.X - other.X,
+		this.Y - other.Y,
+		this.Z - other.Z,
+		this.W - other.W)
 }
 
-func Vec4Mul(a *Vec4, b float32) Vec4 {
-	var temp Vec4
-	temp.X = a.X * b
-	temp.Y = a.Y * b
-	temp.Z = a.Z * b
-	temp.W = a.W * b
-	return temp
+func (this *Vec4) Mul(f float32) *Vec4 {
+	return CreateVec4(
+		this.X * f,
+		this.Y * f,
+		this.Z * f,
+		this.W * f)
 }
 
-func Vec4Div(a *Vec4, b float32) Vec4 {
-	var temp Vec4
-	temp.X = a.X / b
-	temp.Y = a.Y / b
-	temp.Z = a.Z / b
-	temp.W = a.W / b
-	return temp
+func (this *Vec4) Div(f float32) *Vec4 {
+	return CreateVec4(
+		this.X / f,
+		this.Y / f,
+		this.Z / f,
+		this.W / f)
 }
 
-func Vec4Length(a *Vec4) float32 {
-	return float32(math.Sqrt(float64(a.X * a.X + a.Y * a.Y + a.Z * a.Z + a.W * a.W)))
+func (this *Vec4) Length() float32 {
+	return float32(math.Sqrt(float64(this.X * this.X + this.Y * this.Y + this.Z * this.Z + this.W * this.W)))
 }
 
-func Vec4Normalize(a *Vec4) Vec4 {
-	return Vec4Div(a, Vec4Length(a))
+func (this *Vec4) Normalize() *Vec4 {
+	return this.Div(this.Length())
 }
 
-func Vec4Dot(a *Vec4, b *Vec4) float32 {
-	return a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W
+func (this *Vec4) Dot(other *Vec4) float32 {
+	return this.X * other.X + this.Y * other.Y + this.Z * other.Z + this.W * other.Z
 }
 
-func Vec4Angle(a *Vec4, b *Vec4) float32 {
-	var d float32 = Vec4Dot(a, b)
-	var la float32 = Vec4Length(a)
-	var lb float32 = Vec4Length(b)
-	return float32(math.Acos(float64(d / (la * lb))))
+func (this *Vec4) Angle(other *Vec4) float32 {
+	var d float32 = this.Dot(other)
+	var al float32 = this.Length()
+	var bl float32 = other.Length()
+	return float32(math.Acos(float64(d / (al * bl))))
 }
 
-func Vec4ToArray(a *Vec4) []float32 {
+func (this *Vec4) ToArray() []float32 {
 	var temp []float32
-	temp = append(temp, a.X)
-	temp = append(temp, a.Y)
-	temp = append(temp, a.Z)
-	temp = append(temp, a.W)
+	temp = append(temp, this.X)
+	temp = append(temp, this.Y)
+	temp = append(temp, this.Z)
+	temp = append(temp, this.W)
 	return temp
 }
